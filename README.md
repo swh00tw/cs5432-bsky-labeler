@@ -16,10 +16,12 @@ To install all JavaScript dependencies, run the following command:
 npm install
 ```
 
-To run python file, run the following command:
+To run any python file, run the following command:
 
 ```bash
-uv run main.py
+# use this to replace running `python3 path/to/python/file.py` to automatically activate virtual environment
+# so that we don't have to worry about dependencies
+uv run path/to/python/file.py
 ```
 
 ## Environment Variables
