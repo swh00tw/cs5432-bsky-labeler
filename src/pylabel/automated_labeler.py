@@ -108,6 +108,7 @@ class AutomatedLabeler:
         else:
             cid = image.image.ref
 
+        # the image url format is obtained by observing the pattern of the image url in bluesky web app
         return f"https://cdn.bsky.app/img/feed_thumbnail/plain/{did}/{cid}@jpeg"
 
     def getDidFromRecordUri(self, uri: str) -> str:
