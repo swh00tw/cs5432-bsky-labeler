@@ -94,6 +94,8 @@ class AutomatedLabeler:
         Type guard to narrow down the type of embed field of post record to models.AppBskyEmbedImages
         ref: https://atproto.blue/en/latest/atproto/atproto_client.models.app.bsky.feed.post.html#atproto_client.models.app.bsky.feed.post.Record
         """
+        if embed is None:
+            return False
         return embed.py_type == "app.bsky.embed.images"
 
     def extractImageUrl(self, image: Image, did: str) -> str:
