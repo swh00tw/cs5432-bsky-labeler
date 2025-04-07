@@ -3,6 +3,7 @@
 from typing import List
 from atproto import Client
 from .label import post_from_url
+from telnetlib import DO
 
 T_AND_S_LABEL = "t-and-s"
 DOG_LABEL = "dog"
@@ -30,6 +31,15 @@ class AutomatedLabeler:
         self.tsWordSet = tsWordSet
         self.tsDomainSet = tsDomainSet
 
+        # for citation labels
+        domainToLabel = {}
+        # read domain, label pair from news-domains.csv under input_dir
+        with open(f"{input_dir}/news-domains.csv", "r") as f:
+            for line in f:
+                domain, label = line.strip().split(",")
+                domainToLabel[domain] = label
+        self.domainToLabel = domainToLabel
+
     def moderate_post(self, url: str) -> List[str]:
         """
         Apply moderation to the post specified by the given url
@@ -46,5 +56,11 @@ class AutomatedLabeler:
             shouldApplyTSLabel = True
         if shouldApplyTSLabel:
             labels.append(T_AND_S_LABEL)
+
+        # CITATION
+        # if postBody contains words or domains in domainToLabel, add corresponding label
+        for domain in self.domainToLabel:
+            if domain in postBody.lower():
+                labels.append(self.domainToLabel[domain])
 
         return labels
