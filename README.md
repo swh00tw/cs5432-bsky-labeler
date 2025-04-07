@@ -31,3 +31,9 @@ cp .env.example .env
 ```
 
 Then, you need to fill in the `.env` file with your own environment variables.
+
+After adding environment variables, you can run the following command to check if everything is working fine:
+
+```bash
+uv run src/get_post_test.py
+```
