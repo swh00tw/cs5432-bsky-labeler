@@ -6,14 +6,15 @@ Please install `uv` on your machine first. (Installation guide: [https://docs.as
 
 To install all python dependencies, run the following command:
 
-````bash
+```bash
 uv sync
 ```
+
 To install all JavaScript dependencies, run the following command:
 
 ```bash
 npm install
-````
+```
 
 To run python file, run the following command:
 
