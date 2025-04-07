@@ -21,3 +21,13 @@ To run python file, run the following command:
 ```bash
 uv run main.py
 ```
+
+## Environment Variables
+
+After cloning the repository, you need to create a `.env` file in the root directory. Please run
+
+```bash
+cp .env.example .env
+```
+
+Then, you need to fill in the `.env` file with your own environment variables.
