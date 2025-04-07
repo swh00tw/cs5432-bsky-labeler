@@ -1,0 +1,21 @@
+{
+  "name": "cs5432-bsky-labeler",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/swh00tw/cs5432-bsky-labeler.git"
+  },
+  "author": "swh00tw",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/swh00tw/cs5432-bsky-labeler/issues"
+  },
+  "homepage": "https://github.com/swh00tw/cs5432-bsky-labeler#readme",
+  "dependencies": {
+    "@skyware/labeler": "^0.2.0"
+  }
+}
