@@ -48,7 +48,7 @@ class AutomatedLabeler:
         self.dogImageHashes = []
         dog_images_dir = f"{self.input_dir}/dog-list-images"
         for filename in os.listdir(dog_images_dir):
-            if filename.endswith(('.jpg', '.jpeg', '.png')):
+            if filename.endswith((".jpg", ".jpeg", ".png")):
                 image_path = os.path.join(dog_images_dir, filename)
                 hash = self.hasher.compute(image_path)
                 self.dogImageHashes.append(hash)
@@ -106,7 +106,7 @@ class AutomatedLabeler:
         if isinstance(image.image.ref, IpldLink):
             cid = image.image.ref.link
         elif isinstance(image.image.ref, bytes):
-            cid = image.image.ref.decode('utf-8')
+            cid = image.image.ref.decode("utf-8")
         else:
             cid = image.image.ref
 
@@ -127,10 +127,10 @@ class AutomatedLabeler:
             # Compute hash directly from URL
             target_hash = self.hasher.compute(image_url)
             if target_hash is None or isinstance(target_hash, list):
-                return float('inf')
+                return float("inf")
 
             # Find minimum distance to any reference hash
-            min_distance = float('inf')
+            min_distance = float("inf")
             for ref_hash in self.dogImageHashes:
                 distance = self.hasher.compute_distance(target_hash, ref_hash)
                 min_distance = min(min_distance, distance)
@@ -139,4 +139,4 @@ class AutomatedLabeler:
 
         except Exception as e:
             print(f"Error processing image {image_url}: {e}")
-            return float('inf')
+            return float("inf")

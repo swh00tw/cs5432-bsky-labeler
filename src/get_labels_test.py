@@ -20,10 +20,9 @@ def main():
     uris = ["at://did:plc:z72i7hdynmk6r22z27h6tvur/app.bsky.feed.post/3l6oveex3ii2l"]
     did = did_from_handle(USERNAME)
 
-    response = client.com.atproto.label.query_labels({
-        "uri_patterns": uris,
-        "sources": [did]
-    })
+    response = client.com.atproto.label.query_labels(
+        {"uri_patterns": uris, "sources": [did]}
+    )
     print("Successfully loaded labels:", response)
 
 

@@ -14,6 +14,7 @@ load_dotenv(override=True)
 USERNAME = os.getenv("USERNAME")
 PW = os.getenv("PW")
 
+
 def did_from_handle(handle: str):
     """
     Resolve the DID associated with a handle.
