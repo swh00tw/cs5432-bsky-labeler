@@ -299,6 +299,25 @@ wheels = [
 ]
 
 [[package]]
+name = "doublemetaphone"
+version = "1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/fb/054ad89223951abedde4351c5ff8ba009dcd576d8ecafed357762c7f2d9d/DoubleMetaphone-1.1.tar.gz", hash = "sha256:cd185dbc18347accb5a27c1289a6bdc989a479294a74f41c42a6cb0b414e5379", size = 34025 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/28/54/d0933818b96ca2e494ce1ea1f234ab35f3e4aee564761fc09bc1c11c9407/DoubleMetaphone-1.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:b6d29cf7aa3969be0b6e74244edc52f29ccb47d8d7e5fc9265ca398d3774deb8", size = 39689 },
+    { url = "https://files.pythonhosted.org/packages/98/12/7d1709fffafef071bef71b945426e7fc3a5e7014254ab90e29fd626249b4/DoubleMetaphone-1.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:ea3ce737506b91b6e2ed46f41e29ca11a188cdfd5f54606d60b8e86e09bd81a1", size = 22758 },
+    { url = "https://files.pythonhosted.org/packages/cd/3d/261fc0643a58063ae8792047cba697041b832737b82795b32267c4224e5b/DoubleMetaphone-1.1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:d1ec804224d2361a5ef2b408177ec65e4a7a49a28d934e3c919ee6487763566e", size = 21995 },
+    { url = "https://files.pythonhosted.org/packages/d7/65/d3548fd57be05c9cc1e57ac68ce3fa86c19f231f9de6422f4127d883702b/DoubleMetaphone-1.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:8e35454c366b609f365ac15727b9e3a288cd0373aa30603fda7675016c032dca", size = 127561 },
+    { url = "https://files.pythonhosted.org/packages/6b/97/bba02e5329613bb6218d6a8ba58e71ea065c1bf91b2f5193eba02931dd54/DoubleMetaphone-1.1-cp310-cp310-manylinux_2_5_i686.manylinux1_i686.manylinux_2_12_i686.manylinux2010_i686.whl", hash = "sha256:47f91b6d54b75e41a0e4c4ed6b4dbf0b64bd8c08239cf5d4dd75f76d1c6aae30", size = 146102 },
+    { url = "https://files.pythonhosted.org/packages/fe/ed/a9147860d80d67b9eccbe8cb78121283d5d08189b9d90f26800b2f66d952/DoubleMetaphone-1.1-cp310-cp310-manylinux_2_5_x86_64.manylinux1_x86_64.manylinux_2_12_x86_64.manylinux2010_x86_64.whl", hash = "sha256:51cbe1ec26498fd631f6e3b599ba2473a072541461b391ad78ae5b255de27aab", size = 150215 },
+    { url = "https://files.pythonhosted.org/packages/61/d8/1393b8ff1bde9ce8b32f98143b4f279e97c95360182e43d4743ca539d33e/DoubleMetaphone-1.1-cp310-cp310-musllinux_1_1_aarch64.whl", hash = "sha256:557cc9b21f4e2257e4f404859a015ef8ed11713cdffad3446d919d6963e0f8a8", size = 690442 },
+    { url = "https://files.pythonhosted.org/packages/21/6d/b8965b8703224a0ab264b49147b5b6794c941fc33967ee424badea6cba5d/DoubleMetaphone-1.1-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:4cfe99954df4aa6895349781734a207513219520af16aafd46446877d66ae558", size = 750651 },
+    { url = "https://files.pythonhosted.org/packages/35/60/e817df27c4523bba06462a1c38101ecbd676896843eeb599b78eaaaeed00/DoubleMetaphone-1.1-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:a79ae04e709ef33a408a1d43170695980414abede4863526c42d0047bb1538eb", size = 703378 },
+    { url = "https://files.pythonhosted.org/packages/12/5d/5899b03a047da346440a8812b0bcf74d35c76dbee948cb04275ce060a1b8/DoubleMetaphone-1.1-cp310-cp310-win32.whl", hash = "sha256:77029daa26bc22c2dd8d8928eb5e7ded90f1bf70519016b73de3751bdbc55e9e", size = 26477 },
+    { url = "https://files.pythonhosted.org/packages/8d/d8/d9d63ffec247c346ca0528dcc3425824b0ea283af9e4cd8bc1b682043f71/DoubleMetaphone-1.1-cp310-cp310-win_amd64.whl", hash = "sha256:77e69bd9fee97f26c7d5ce5c75fbc981a3fbde8876591721e70139a12958c0b9", size = 28319 },
+]
+
+[[package]]
 name = "exceptiongroup"
 version = "1.2.2"
 source = { registry = "https://pypi.org/simple" }
@@ -350,6 +369,7 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "atproto" },
+    { name = "doublemetaphone" },
     { name = "perception" },
     { name = "python-dotenv" },
     { name = "requests" },
@@ -359,6 +379,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "atproto", specifier = ">=0.0.59" },
+    { name = "doublemetaphone", specifier = ">=1.1" },
     { name = "perception", specifier = ">=0.7.7" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "requests", specifier = ">=2.32.3" },
