@@ -1,5 +1,24 @@
 # Bsky Linguistic Evasion Labler
 
+## High Level Overview
+
+The linguistic evasion labeler detects posts on Bluesky that attempt to evade content moderation by using various linguistic techniques to disguise harmful language. The labeler implements three main detection strategies:
+
+1. **Character Substitution Detection**: Identifies posts where users replace certain characters with similar-looking ones (e.g., "h3llo" instead of "hello") to evade text-based filters. Uses Levenshtein distance to calculate word similarity.
+
+2. **Homophone Detection**: Detects cases where words that sound like harmful words are used (e.g., "weight" instead of "hate"). Uses the `metaphone` library with Double Metaphone phonetic encoding to identify similar-sounding words regardless of spelling variations.
+
+3. **Spoonerism Detection**: Identifies when initial sounds of words are swapped to create harmful content in a disguised way (e.g., "bass ackwards" for "ass backwards").
+
+The labeler applies the following labels:
+
+- `linguistic-evasion`: General label applied when any evasion technique is detected
+- `character-substitution`: Applied when character substitution is detected
+- `homophone`: Applied when homophone usage is detected
+- `spoonerism`: Applied when spoonerism usage is detected
+
+The system uses context analysis to reduce false positives, with weighted scoring for words indicating harmful intent. It also applies different thresholds based on word length and maintains specialized dictionaries for harmful words, character substitutions, and known homophones.
+
 ## Setup
 
 This project is mainly managed by [`uv`](https://docs.astral.sh/uv/) (for JavaScript part, it's managed by [`npm`](https://www.npmjs.com/)), which is the fastest package manager for python now. It will automatically setup virtual environment for you and install all the dependencies. You can install it by running the following command:

@@ -1,0 +1,56 @@
+===== EVALUATION: GENERAL LABEL (linguistic-evasion) =====
+Accuracy:  0.6090
+Precision: 0.9129
+Recall:    0.3127
+F1 Score:  0.4658
+
+Confusion Matrix:
+True Positives:  283 (correctly identified evasion)
+False Positives: 27 (normal posts incorrectly labeled as evasion)
+True Negatives:  728 (correctly identified normal posts)
+False Negatives: 622 (missed evasion)
+
+===== EVALUATION: SPECIFIC LABELS =====
+
+----- Label: character-substitution -----
+Accuracy:  0.7753
+Precision: 0.5245
+Recall:    0.3601
+F1 Score:  0.4270
+
+Confusion Matrix:
+True Positives:  139 (correctly identified character-substitution)
+False Positives: 126 (incorrectly labeled as character-substitution)
+True Negatives:  1148 (correctly identified not character-substitution)
+False Negatives: 247 (missed character-substitution)
+
+----- Label: homophone -----
+Accuracy:  0.7898
+Precision: 0.5085
+Recall:    0.0857
+F1 Score:  0.1467
+
+Confusion Matrix:
+True Positives:  30 (correctly identified homophone)
+False Positives: 29 (incorrectly labeled as homophone)
+True Negatives:  1281 (correctly identified not homophone)
+False Negatives: 320 (missed homophone)
+
+----- Label: spoonerism -----
+Accuracy:  0.8970
+Precision: 0.4444
+Recall:    0.0473
+F1 Score:  0.0856
+
+Confusion Matrix:
+True Positives:  8 (correctly identified spoonerism)
+False Positives: 10 (incorrectly labeled as spoonerism)
+True Negatives:  1481 (correctly identified not spoonerism)
+False Negatives: 161 (missed spoonerism)
+
+===== PERFORMANCE METRICS =====
+Average processing time: 0.231 seconds per post
+Fastest processing time: 0.169 seconds
+Slowest processing time: 0.444 seconds
+Errors encountered: 0 (0.0% of test data)
+============================

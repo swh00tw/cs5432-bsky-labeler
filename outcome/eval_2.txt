@@ -1,0 +1,18 @@
+===== EVALUATION: GENERAL LABEL (linguistic-evasion) =====
+Accuracy:  0.6410
+Precision: 0.8670
+Recall:    0.4033
+F1 Score:  0.5505
+
+Confusion Matrix:
+True Positives:  365 (correctly identified evasion)
+False Positives: 56 (normal posts incorrectly labeled as evasion)
+True Negatives:  699 (correctly identified normal posts)
+False Negatives: 540 (missed evasion)
+
+===== PERFORMANCE METRICS =====
+Average processing time: 0.246 seconds per post
+Fastest processing time: 0.184 seconds
+Slowest processing time: 0.514 seconds
+Errors encountered: 0 (0.0% of test data)
+============================
