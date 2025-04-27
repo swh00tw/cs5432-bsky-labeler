@@ -1,0 +1,44 @@
+{
+  "spoonerisms": [
+    {
+      "original": ["kill", "you"],
+      "spoonerism": ["yill", "kou"]
+    },
+    {
+      "original": ["fuck", "you"],
+      "spoonerism": ["yuck", "fou"]
+    },
+    {
+      "original": ["kill", "them"],
+      "spoonerism": ["till", "khem"]
+    },
+    {
+      "original": ["kill", "yourself"],
+      "spoonerism": ["yill", "kourself"]
+    },
+    {
+      "original": ["fuck", "off"],
+      "spoonerism": ["ock", "fuff"]
+    },
+    {
+      "original": ["shit", "head"],
+      "spoonerism": ["hit", "shead"]
+    },
+    {
+      "original": ["dumb", "ass"],
+      "spoonerism": ["aumb", "dass"]
+    },
+    {
+      "original": ["suck", "it"],
+      "spoonerism": ["ick", "sut"]
+    },
+    {
+      "original": ["hate", "you"],
+      "spoonerism": ["yate", "hou"]
+    },
+    {
+      "original": ["die", "now"],
+      "spoonerism": ["nie", "dow"]
+    }
+  ]
+}

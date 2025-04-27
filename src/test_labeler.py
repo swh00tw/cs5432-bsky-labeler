@@ -14,6 +14,7 @@ load_dotenv(override=True)
 USERNAME = os.getenv("USERNAME")
 PW = os.getenv("PW")
 
+
 def main():
     """
     Main function for the test script
@@ -45,7 +46,9 @@ def main():
             print(f"For {url}, labeler produced {labels}, expected {expected_labels}")
         if args.emit_labels and (len(labels) > 0):
             label_post(client, labeler_client, url, labels)
-    print(f"The labeler produced {num_correct} correct labels assignments out of {total}")
+    print(
+        f"The labeler produced {num_correct} correct labels assignments out of {total}"
+    )
     print(f"Overall ratio of correct label assignments {num_correct/total}")
 
 

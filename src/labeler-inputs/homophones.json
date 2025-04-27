@@ -1,0 +1,23 @@
+{
+  "homophones": {
+    "die": ["dye", "di"],
+    "kill": ["kil", "keel", "keel"],
+    "hate": ["h8", "hayt", "hait"],
+    "for": ["4", "fore", "four"],
+    "to": ["2", "too", "two"],
+    "you": ["u", "yew", "ewe"],
+    "your": ["ur", "you're", "yore"],
+    "bitch": ["b!tch", "beach", "beech"],
+    "shit": ["sh!t", "sheet", "cheat"],
+    "fuck": ["fuk", "phuck", "fack"],
+    "ass": ["a$$", "as", "@ss"],
+    "dick": ["d!ck", "dik", "dyk"],
+    "suicide": ["sewer side", "sue a side"],
+    "gay": ["ghey", "gey", "g@y"],
+    "trans": ["tr@ns", "tranz", "trance"],
+    "racist": ["r@cist", "race ist", "ray cyst"],
+    "here": ["hear", "heer"],
+    "know": ["no", "noe"],
+    "right": ["write", "rite"]
+  }
+}
