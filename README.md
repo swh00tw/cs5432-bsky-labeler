@@ -19,6 +19,28 @@ The labeler applies the following labels:
 
 The system uses context analysis to reduce false positives, with weighted scoring for words indicating harmful intent. It also applies different thresholds based on word length and maintains specialized dictionaries for harmful words, character substitutions, and known homophones.
 
+## Evaluation Approach
+
+The labeler is evaluated on four key test cases to assess its effectiveness:
+
+1. **General Label Test**: Evaluates how well the labeler applies the `linguistic-evasion` general label. This measures the overall ability to detect any form of linguistic evasion, regardless of the specific technique used.
+
+2. **Specific Technique Tests**: Three separate tests evaluate how accurately the labeler detects each evasion technique:
+   - Character substitution detection accuracy
+   - Homophone detection accuracy
+   - Spoonerism detection accuracy
+
+For each test, we calculate:
+
+- **Accuracy**: Overall correctness (true positives + true negatives) / total
+- **Precision**: Proportion of positive identifications that were correct (true positives / (true positives + false positives))
+- **Recall**: Proportion of actual positives correctly identified (true positives / (true positives + false negatives))
+- **F1 Score**: Harmonic mean of precision and recall
+
+We also track performance metrics like processing time per post and error rates to ensure the labeler is efficient enough for real-world applications.
+
+The evaluation is performed on a diverse dataset of both normal posts and posts containing different linguistic evasion techniques, collected using the data collection scripts described below.
+
 ## Setup
 
 This project is mainly managed by [`uv`](https://docs.astral.sh/uv/) (for JavaScript part, it's managed by [`npm`](https://www.npmjs.com/)), which is the fastest package manager for python now. It will automatically setup virtual environment for you and install all the dependencies. You can install it by running the following command:
