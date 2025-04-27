@@ -13,10 +13,11 @@ CHAR_SUBSTITUTION_LABEL = "character-substitution"
 HOMOPHONE_LABEL = "homophone"
 SPOONERISM_LABEL = "spoonerism"
 
-# Thresholds for detection
-CHAR_SUBSTITUTION_THRESHOLD = 0.8  # Min similarity score for character substitution
-HOMOPHONE_SIMILARITY_THRESHOLD = 0.7  # Min phonetic similarity for homophones
-MIN_WORD_LENGTH = 3  # Minimum word length to consider for harmful words
+# Thresholds for detection - tuned for better precision/recall balance
+CHAR_SUBSTITUTION_THRESHOLD = 0.85  # Increased for higher precision
+HOMOPHONE_SIMILARITY_THRESHOLD = 0.8  # Increased for higher precision
+MIN_WORD_LENGTH = 4  # Increased minimum word length
+MIN_CONTEXT_SCORE = 2  # Minimum context score to consider harmful intent
 
 
 class LinguisticEvasionLabeler:
@@ -36,6 +37,11 @@ class LinguisticEvasionLabeler:
             if length not in self.harmful_words_by_length:
                 self.harmful_words_by_length[length] = set()
             self.harmful_words_by_length[length].add(word)
+
+        # Load high-confidence harmful words - these are words we're very sure about
+        self.high_confidence_harmful = self._load_high_confidence_harmful(
+            self.harmful_words
+        )
 
         # Load character substitutions
         self.char_substitutions = self._load_char_substitutions(
@@ -70,23 +76,29 @@ class LinguisticEvasionLabeler:
 
         # Context words that may indicate actual harmful intent
         self.context_harm_indicators = {
-            "hate",
-            "stupid",
-            "ugly",
-            "bad",
-            "worst",
-            "die",
-            "death",
-            "kill",
-            "fuck",
-            "shit",
-            "damn",
-            "hell",
-            "idiot",
-            "dumb",
-            "worthless",
-            "trash",
-            "horrible",
+            "hate": 2,
+            "stupid": 1,
+            "ugly": 1,
+            "bad": 1,
+            "worst": 1,
+            "die": 3,
+            "death": 3,
+            "kill": 3,
+            "dead": 2,
+            "fuck": 2,
+            "shit": 1,
+            "damn": 1,
+            "hell": 1,
+            "idiot": 2,
+            "dumb": 1,
+            "worthless": 2,
+            "trash": 1,
+            "horrible": 1,
+            "attack": 2,
+            "violent": 2,
+            "destroy": 2,
+            "hurt": 2,
+            "harm": 2,
         }
 
     def _load_harmful_words(self, file_path: str) -> Set[str]:
@@ -101,6 +113,10 @@ class LinguisticEvasionLabeler:
         except Exception as e:
             print(f"Error loading harmful words: {e}")
         return harmful_words
+
+    def _load_high_confidence_harmful(self, harmful_words: Set[str]) -> Set[str]:
+        """Extract high-confidence harmful words (longer and more specific)"""
+        return {word for word in harmful_words if len(word) >= 6}
 
     def _load_char_substitutions(self, file_path: str) -> Dict[str, str]:
         """Load character substitution mappings from a JSON file"""
@@ -163,9 +179,13 @@ class LinguisticEvasionLabeler:
             normalized = normalized.replace(char, replacement)
         return normalized
 
-    def _detect_context(self, words: List[str]) -> bool:
-        """Detect if the context indicates harmful intent"""
-        return any(word in self.context_harm_indicators for word in words)
+    def _calculate_context_score(self, words: List[str]) -> int:
+        """Calculate a context score based on harmful intent indicators"""
+        score = 0
+        for word in words:
+            if word in self.context_harm_indicators:
+                score += self.context_harm_indicators[word]
+        return score
 
     def _calculate_char_similarity(self, word1: str, word2: str) -> float:
         """Calculate character similarity between two words using Levenshtein distance
@@ -229,7 +249,19 @@ class LinguisticEvasionLabeler:
         words_raw = re.findall(r"\b\w+\b", normalized_text)
         words = [word for word in words_raw if len(word) >= MIN_WORD_LENGTH]
 
-        # Check for matches of harmful words after normalization
+        # Early return if not enough substantial words
+        if len(words) < 2:
+            return False
+
+        # Calculate context score
+        context_score = self._calculate_context_score(words_raw)
+
+        # For high-confidence harmful words, use direct matching first
+        for word in words:
+            if word in self.high_confidence_harmful:
+                return True
+
+        # Apply more stringent checks for normal harmful words
         for word in words:
             # Optimization: Only check words of similar length
             word_len = len(word)
@@ -238,14 +270,22 @@ class LinguisticEvasionLabeler:
             for length in possible_lengths:
                 if length in self.harmful_words_by_length:
                     for harmful_word in self.harmful_words_by_length[length]:
+                        # Higher threshold for shorter words to reduce false positives
+                        effective_threshold = CHAR_SUBSTITUTION_THRESHOLD
+                        if len(harmful_word) < 6:
+                            effective_threshold += 0.05  # More strict for short words
+
                         similarity = self._calculate_char_similarity(word, harmful_word)
-                        if similarity >= CHAR_SUBSTITUTION_THRESHOLD:
-                            # For non-exact matches, check for harmful context indicators
-                            if word != harmful_word and not self._detect_context(
-                                words_raw
-                            ):
-                                continue
+
+                        # Exact match is always detected
+                        if word == harmful_word:
                             return True
+
+                        # Close match with sufficient context is flagged
+                        if similarity >= effective_threshold:
+                            # For non-exact matches, require context support
+                            if context_score >= MIN_CONTEXT_SCORE:
+                                return True
 
         return False
 
@@ -284,31 +324,44 @@ class LinguisticEvasionLabeler:
         words_raw = re.findall(r"\b\w+\b", text.lower())
         words = [word for word in words_raw if len(word) >= MIN_WORD_LENGTH]
 
+        # Early return if not enough words
+        if len(words) < 2:
+            return False
+
+        # Calculate context score
+        context_score = self._calculate_context_score(words_raw)
+        if context_score < MIN_CONTEXT_SCORE:
+            return False  # Require minimum context for homophones
+
         # First check direct homophone matches from our dictionary
         for word in words:
             # Check if this word is in our homophone lookup
             if word in self.homophone_lookup:
                 for related_word in self.homophone_lookup[word]:
                     if related_word in self.harmful_words:
-                        # Check for context indicators
-                        if self._detect_context(words_raw):
-                            return True
+                        # Only report homophones in harmful contexts
+                        return True
 
         # Then check using phonetic similarity for words not in our dictionary
-        for word in words:
-            if len(word) < MIN_WORD_LENGTH:
-                continue
-
-            # Check for phonetic similarity with harmful words
-            for harmful_word in self.harmful_words:
-                # Skip identical words (that's character substitution)
-                if word == harmful_word:
+        # Only do this for posts with strong harmful context to reduce false positives
+        if context_score >= MIN_CONTEXT_SCORE + 1:
+            for word in words:
+                if len(word) < MIN_WORD_LENGTH:
                     continue
 
-                similarity = self._calculate_phonetic_similarity(word, harmful_word)
-                if similarity >= HOMOPHONE_SIMILARITY_THRESHOLD:
-                    # Check for context indicators
-                    if self._detect_context(words_raw):
+                # Check for phonetic similarity with harmful words
+                for harmful_word in self.harmful_words:
+                    # Skip identical words (that's character substitution)
+                    if word == harmful_word:
+                        continue
+
+                    # Apply stricter threshold for shorter words
+                    effective_threshold = HOMOPHONE_SIMILARITY_THRESHOLD
+                    if len(harmful_word) < 6:
+                        effective_threshold += 0.05  # Higher threshold for short words
+
+                    similarity = self._calculate_phonetic_similarity(word, harmful_word)
+                    if similarity >= effective_threshold:
                         return True
 
         return False
@@ -316,6 +369,15 @@ class LinguisticEvasionLabeler:
     def _check_for_spoonerisms(self, text: str) -> bool:
         """Check if the text contains spoonerisms of harmful phrases"""
         words = re.findall(r"\b\w+\b", text.lower())
+
+        # Early return if not enough words for a spoonerism
+        if len(words) < 2:
+            return False
+
+        # Calculate context score - spoonerisms require strong harmful context
+        context_score = self._calculate_context_score(words)
+        if context_score < MIN_CONTEXT_SCORE:
+            return False
 
         # Check for adjacent word pairs
         for i in range(len(words) - 1):
@@ -328,9 +390,8 @@ class LinguisticEvasionLabeler:
                 if any(orig_word in self.harmful_words for orig_word in original):
                     return True
 
-            # Try to detect spoonerisms not in our dictionary
-            # by checking if swapping initial sounds creates harmful words
-            if len(words[i]) > 1 and len(words[i + 1]) > 1:
+            # Only check words that are significant enough to form a spoonerism
+            if len(words[i]) > 2 and len(words[i + 1]) > 2:
                 # Extract initial sounds (first letter as approximation)
                 sound1, sound2 = words[i][0], words[i + 1][0]
 
@@ -354,14 +415,19 @@ class LinguisticEvasionLabeler:
             post_text = post.value.text
             labels = []
 
-            # If text is too short, likely not evasion
-            if len(post_text.strip()) < 5:
-                return labels
-
             # Apply detection methods
             char_sub_detected = self._check_for_character_substitution(post_text)
-            homophone_detected = self._check_for_homophones(post_text)
-            spoonerism_detected = self._check_for_spoonerisms(post_text)
+
+            # Only check for homophones and spoonerisms if we have enough context
+            words_raw = re.findall(r"\b\w+\b", post_text.lower())
+            context_score = self._calculate_context_score(words_raw)
+
+            homophone_detected = False
+            spoonerism_detected = False
+
+            if context_score >= MIN_CONTEXT_SCORE:
+                homophone_detected = self._check_for_homophones(post_text)
+                spoonerism_detected = self._check_for_spoonerisms(post_text)
 
             # Add appropriate labels
             if char_sub_detected:
